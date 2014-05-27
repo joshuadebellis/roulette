@@ -1,58 +1,42 @@
 import random
 
-
-    
-    
-class Roulette(object):
+class Roulette:
     play_again = True
-    def __init__(self,bet,bet_2, bankroll):
-        self.bet = bet 
-        self.bet_2 = bet_2
+    def __init__(self, bankroll):
         self.bankroll = bankroll
-    def wheelspin(self):
+    def wheelspin(self, bet, bet_2):
         spin = random.randint(0,36)
-        if spin % 2 == 0 and bet_2 == "black":
-            self.bankroll +=  2 * int(self.bet)
-            print "you win!"
-            print "your current bankroll is " , self.bankroll
-            question = raw_input("Would you like to play again? ")
-            if  question == "yes":
-                play_again = True
-            else:
-                play_again = False
-        
-        elif spin % 2 !=0 and  bet_2 == "red":
-            self.bankroll = int(self.bankroll) + 2 * int(self.bet)
-            print "you win!"
-            print "your current bankroll is " ,self.bankroll
-            question = raw_input("Would you like to play again? ")
-            if  question == "yes":
-                 play_again = True
-            else:
-                 play_again = False
+        if spin % 2 == 0 and bet_2 == "black" or spin % 2 !=0 and  bet_2 == "red":
+            self.bankroll +=  2 * bet
+            return True
+            
         else:
-             self.bankroll = int(self.bankroll) - 2 * int(self.bet)
-             print "you lose!"
-             print "your current bankroll is " , self.bankroll
-             question = raw_input("Would you like to play again? ")
-             if  question == "yes":
-                 play_again = True
-             if  question == "no" :
-                 play_again = False
-             
+             self.bankroll -= bet
+             return False
+        
+# initialize variables
+play_again = True
+bet = 0
+bet2 = ''
+pot = 0
+bankroll = 0
 
-                 
-        return 0
-        
-        
+bankroll = int(raw_input("What's your starting pot ? "))
+gambling = Roulette(bankroll)
 
-bankroll = raw_input("What's your starting pot ? ")
-bet = int(raw_input("Place your Bet! "))
-bet_2 = raw_input("Red or Black ? ")
-Gambling = Roulette(bet, bet_2, bankroll)
-while Gambling.play_again == True:
-    Gambling = Roulette(bet, bet_2, bankroll)
-    Gambling.wheelspin()
-        
-        
+while play_again == True:
+    bet = int(raw_input("How much would you like to bet? "))
+
+    valid_bet = False
+    while valid_bet != True:
+        bet_2 = raw_input("Red or black ? ").lower()
+        valid_bet = (bet_2 in ('red', 'black'))
+    winner_is_you = gambling.wheelspin(bet, bet_2)
+    if winner_is_you:
+        print "You win!"
+    else:
+        print "You lose!"
+    print "your current bankroll is " , gambling.bankroll
+    question = raw_input("Would you like to play again? ")
+    play_again = question == "yes"
     
